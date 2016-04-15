@@ -1,0 +1,74 @@
+.toolbox-top-wrapper{
+	position:relative ;
+	top: 0;
+	left:0 ;
+}
+.toolbox-top{
+  background: #EF5350;
+  display:none ;
+  border-radius:20px ;
+}
+.toolbox-top-normal{
+  width:40px ;
+  height:40px ;
+}
+.toolbox-top-small{
+	width:20px ;
+	height:20px ;
+}
+.toolbox-top-large{
+	width:60px ;
+	height:60px ;
+}
+.toolbox-top-show{
+  display:-webkit-flex ;
+  display: flex ;
+}
+.toolbox-top-hide{
+  display:none ;
+}
+.toolbox-top-bottom-right{
+	position:absolute ;
+	right:30px ;
+	bottom: 20px ;
+}
+.toolbox-top-bottom-left{
+	position:absolute ;
+	left:30px ;
+	bottom: 20px ;
+}
+.toolbox-top-top-right{
+	position:absolute ;
+	right:30px ;
+	top: 20px ;
+}
+.toolbox-top-top-left{
+	position:absolute ;
+	left:30px ;
+	top: 20px ;
+}
+.toolbox-top-bottom-right-fixed{
+	position:fixed ;
+	right:30px ;
+	bottom: 20px ;
+}
+.toolbox-top-bottom-left-fixed{
+	position:fixed ;
+	left:30px ;
+	bottom: 20px ;
+}
+.toolbox-top-top-right-fixed{
+	position:fixed ;
+	right:30px ;
+	top: 20px ;
+}
+.toolbox-top-top-left-fixed{
+	position:fixed ;
+	left:30px ;
+	top: 20px ;
+}
+.toolbox-top-caret{
+  margin:auto ;
+  font-weight: bold ;
+  font-size : 30px
+}
