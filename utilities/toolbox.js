@@ -1,14 +1,14 @@
 //description : Main Toolbox which holds all the tools
 
-define(['./backtotop'], function(backtotop){
+define(['./global', './backtotop'], function(Toolbox, backtotop){
 
-var Toolbox = (function(){
-	var Toolbox = {} ;
-	var tools = [] ;	
+(function(Toolbox){
+	
+	Toolbox.tools = [] ;	
 	Toolbox.addTool = function(){
 		console.log(arguments[0]) ;
 		var tool = backtotop(arguments[0]) ;
-		Toolbox.backtotop = tool ;
+		Toolbox.tools.push(tool) ;
 		return tool ;
 	} ;
 
@@ -17,8 +17,6 @@ var Toolbox = (function(){
 	} ;
 
 	return Toolbox ;
-}()) ;
-
-return Toolbox ;
+}(Toolbox)) ;
 
 }) ;

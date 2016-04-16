@@ -2,11 +2,12 @@
 //label : backToTop
 //group : utilities
 
-define(function(){
+define(['./global'], function(Toolbox){
 
-var backtotop = (function() {
+var backtotop = (function(Toolbox) {
 	//Constructor
-	var plugin = {} ;
+	var plugin = function(){} ;
+
 	var init = function(arguments){
 
 		this.button = null ;
@@ -37,8 +38,8 @@ var backtotop = (function() {
 
 	} ;
 
-	plugin.create = function(arguments){
-		init.call(plugin, arguments) ;
+	plugin.prototype.create = function(arguments){
+		init.call(this, arguments) ;
 		console.log(this.options) ;
 		if(this.options.container === null){
 			this.options.container = document.createElement('div') ;
@@ -329,11 +330,12 @@ var backtotop = (function() {
 	//Toolbox.backtotop = plugin ;
 	
 	var main = function(){
-		plugin.create(arguments) ;
-		return plugin ;
+		var backtotop = new plugin() ;
+		backtotop.create(arguments) ;
+		return backtotop ;
 	} ;
 	return main ;
-}());
+}(Toolbox));
 
 return backtotop ;
 }) ;
