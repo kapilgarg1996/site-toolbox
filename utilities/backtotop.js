@@ -21,7 +21,7 @@ var backtotop = (function(Toolbox) {
 			visibleTarget: null,
 			autoHide : true,
 			className : "toolbox-top",
-			sizeof : "normal",
+			size : "normal",
 			position : "bottom-right"
 		} ;
 
@@ -247,13 +247,13 @@ var backtotop = (function(Toolbox) {
 	}
 	
 	function setButtonSize(){
-		if(this.options.sizeof === "normal"){
+		if(this.options.size === "normal"){
 			this.button.className += " toolbox-top-normal" ;
 		}
-		else if(this.options.sizeof === "small"){
+		else if(this.options.size === "small"){
 			this.button.className += " toolbox-top-small" ;
 		}
-		else if(this.options.sizeof === "large"){
+		else if(this.options.size === "large"){
 			this.button.className += " toolbox-top-large" ;
 		}
 		else{
