@@ -2,11 +2,12 @@
 //label : backToTop
 //group : utilities
 
-var Toolbox = {} ;
+define(function(){
 
-(function() {
+var backtotop = (function() {
 	//Constructor
-	this.BackToTop = function(){
+	var plugin = {} ;
+	var init = function(arguments){
 
 		this.button = null ;
 
@@ -36,8 +37,9 @@ var Toolbox = {} ;
 
 	} ;
 
-	this.BackToTop.prototype.create = function(){
-
+	plugin.create = function(arguments){
+		init.call(plugin, arguments) ;
+		console.log(this.options) ;
 		if(this.options.container === null){
 			this.options.container = document.createElement('div') ;
 			while(document.body.firstChild){
@@ -161,6 +163,17 @@ var Toolbox = {} ;
 		var setter = function(){
 			if(distance <= requiredDistance){
 			distance = (acceleration*Math.log(1+ elapsedTime))/2 ;
+			if(distance >= requiredDistance){
+				console.log(destinationPos) ;
+				clearInterval(timer) ;
+				if(this.settings.eventTarget === window){
+					document.body.scrollTop = destinationPos ;
+				}
+				else{
+					this.options.container.scrollTop = currentPos-distance ;
+				}
+				return ;
+			}
 			if(this.settings.eventTarget === window){
 				document.body.scrollTop = currentPos - distance ;
 				reachedPos = this.settings.eventTarget.pageYOffset ;
@@ -172,7 +185,12 @@ var Toolbox = {} ;
 		}
 		else{
 			clearInterval(timer) ;
-			this.options.container.scrollTop = destinationPos ;
+			if(this.settings.eventTarget === window){
+				document.body.scrollTop = destinationPos ;
+			}
+			else{
+				this.options.container.scrollTop = currentPos-distance ;
+			}
 		}
 		}
 		var timer = setInterval(setter.bind(this), 5) ;
@@ -307,4 +325,15 @@ var Toolbox = {} ;
 		}
 		return source;
 	}
-}).apply(Toolbox);
+
+	//Toolbox.backtotop = plugin ;
+	
+	var main = function(){
+		plugin.create(arguments) ;
+		return plugin ;
+	} ;
+	return main ;
+}());
+
+return backtotop ;
+}) ;
