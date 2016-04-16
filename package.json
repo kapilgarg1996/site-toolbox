@@ -25,5 +25,9 @@
   "homepage": "https://github.com/kapilgarg1996/site-toolbox#readme",
   "dependencies": {
     "requirejs": "^2.2.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0"
   }
 }
