@@ -1,4 +1,5 @@
-define(['./global', './toolbox'], function(Toolbox){
+define(['./global', 
+		'./toolbox'], function(Toolbox){
 	return Toolbox ;
 }) ;
 
