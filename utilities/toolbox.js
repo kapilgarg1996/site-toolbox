@@ -5,7 +5,7 @@ define(['./global', './backtotop'], function(Toolbox){
 (function(Toolbox){
 	Toolbox.tools = {} ;
 
-	Toolbox.addTool = function(tool_id, tooltype, tool_config){
+	Toolbox.addTool = function(tool_id, tooltype, tool_config = {}){
 		if(this.tools[tool_id] != undefined){
 			if(this.tools[tool_id].tooltype === tooltype){
 				this.tools[tool_id].tool.modify(tool_config) ;

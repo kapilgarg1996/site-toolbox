@@ -13,20 +13,19 @@ return (function(Toolbox) {
 		this.button = null ;
 
 		var defaults = {
-			content: null,
 			container : null,
 			speed : 'normal',
 			icon : null,
 			target : null,
 			visibleTarget: null,
-			autoHide : true,
-			className : "toolbox-top",
+			className : "",
 			size : "normal",
 			position : "bottom-right"
 		} ;
 
 		var settings = {
-			eventTarget : window,	
+			eventTarget : window,
+			className : 'toolbox-top'
 		} ;
 		if(arguments[0] && typeof arguments[0] === "object"){
 			this.options = extendDefaults(defaults, arguments[0]) ;
@@ -182,7 +181,6 @@ return (function(Toolbox) {
 			if(distance <= requiredDistance){
 			distance = (acceleration*Math.log(1+ elapsedTime))/2 ;
 			if(distance >= requiredDistance){
-				console.log(destinationPos) ;
 				clearInterval(timer) ;
 				if(this.settings.eventTarget === window){
 					document.body.scrollTop = destinationPos ;
@@ -225,6 +223,7 @@ return (function(Toolbox) {
 		else{
 			icon = this.options.icon ;
 		}
+		icon.className += ' toolbox-top-icon' ;
 		
 		this.wrapper = document.createElement("div") ;
 		this.wrapper.className = 'toolbox-top-wrapper' ;
@@ -235,7 +234,7 @@ return (function(Toolbox) {
 		this.options.container.parentNode.appendChild(frag) ;
 		
 		this.button = document.createElement("div") ;
-		this.button.className = this.options.className ;
+		this.button.className = this.settings.className+' '+this.options.className ;
 		this.button.appendChild(icon) ;
 		
 		setButtonSize.call(this, '') ;
