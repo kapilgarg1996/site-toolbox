@@ -4,11 +4,11 @@
 
 define(['./global'], function(Toolbox){
 
-var backtotop = (function(Toolbox) {
+return (function(Toolbox) {
 	//Constructor
-	var plugin = function(){} ;
+	var backtotop = function(){} ;
 
-	var init = function(arguments){
+	var init = function(){
 
 		this.button = null ;
 
@@ -38,9 +38,8 @@ var backtotop = (function(Toolbox) {
 
 	} ;
 
-	plugin.prototype.create = function(arguments){
-		init.call(this, arguments) ;
-		console.log(this.options) ;
+	backtotop.prototype.create = function(){
+		init.call(this, arguments[0]) ;
 		if(this.options.container === null){
 			this.options.container = document.createElement('div') ;
 			while(document.body.firstChild){
@@ -58,6 +57,24 @@ var backtotop = (function(Toolbox) {
 		initialiseEvents.call(this) ;
 		visible.call(this) ;
 	} ;
+	
+	backtotop.prototype.modify = function(){
+		var options = this.options ;
+		var oldsize = options.size ;
+		var oldpos = options.position ;
+		var classes = this.button.className ;
+		if(arguments[0] && typeof arguments[0] === 'object'){
+
+			this.options = extendDefaults(options, arguments[0]) ;
+		}
+		setButtonSize.call(this, 'toolbox-top-'+oldsize) ;
+		if(this.button.className.match('fixed')){
+			oldpos += '-fixed' ;
+		}
+		setButtonPosition.call(this, 'toolbox-top-'+oldpos) ;
+		visible.call(this) ;
+	} ;
+
 	var visible = function(){
 		if(this.settings.eventTarget === window){
 			visibleContainer.call(this) ;
@@ -209,23 +226,23 @@ var backtotop = (function(Toolbox) {
 			icon = this.options.icon ;
 		}
 		
-		wrapper = document.createElement("div") ;
-		wrapper.className = 'toolbox-top-wrapper' ;
-		wrapper.style.width = this.options.container.offsetWidth + "px" ;
+		this.wrapper = document.createElement("div") ;
+		this.wrapper.className = 'toolbox-top-wrapper' ;
+		this.wrapper.style.width = this.options.container.offsetWidth + "px" ;
 		//clone = this.options.container.cloneNode(true) ;
 		frag = document.createDocumentFragment() ;
-		frag.appendChild(wrapper) ;
+		frag.appendChild(this.wrapper) ;
 		this.options.container.parentNode.appendChild(frag) ;
 		
 		this.button = document.createElement("div") ;
 		this.button.className = this.options.className ;
 		this.button.appendChild(icon) ;
 		
-		setButtonSize.call(this) ;
-		wrapper.appendChild(this.options.container) ;
-		wrapper.appendChild(this.button) ;
+		setButtonSize.call(this, '') ;
+		this.wrapper.appendChild(this.options.container) ;
+		this.wrapper.appendChild(this.button) ;
 
-		setButtonPosition.call(this) ;
+		setButtonPosition.call(this, '') ;
 		
 	}
 
@@ -246,62 +263,69 @@ var backtotop = (function(Toolbox) {
 		}) ;
 	}
 	
-	function setButtonSize(){
+	function changeClass(oldClass, newClass){
+		if(oldClass === ''){
+			this.button.className += " "+newClass ;
+			return ;
+		}
+		this.button.className = this.button.className.replace(oldClass, newClass) ;
+	}
+	function setButtonSize(old){
 		if(this.options.size === "normal"){
-			this.button.className += " toolbox-top-normal" ;
+			changeClass.call(this, old, 'toolbox-top-normal') ;
 		}
 		else if(this.options.size === "small"){
-			this.button.className += " toolbox-top-small" ;
+			changeClass.call(this, old, 'toolbox-top-small') ;
 		}
 		else if(this.options.size === "large"){
-			this.button.className += " toolbox-top-large" ;
+			changeClass.call(this, old, 'toolbox-top-large') ;
 		}
 		else{
-			this.button.className += " toolbox-top-normal" ;
+			changeClass.call(this, old, 'toolbox-top-normal') ;
 		}
 
 	}
 
-	function setButtonPosition(){
+	function setButtonPosition(old){
 		switch (this.options.position){
 			case "bottom-right":
 				if(this.settings.eventTarget === window){
-					this.button.className += " toolbox-top-bottom-right-fixed" ;
+					changeClass.call(this, old, 'toolbox-top-bottom-right-fixed') ;
 				}
 				else{
-					this.button.className += " toolbox-top-bottom-right" ;
+					changeClass.call(this, old, 'toolbox-top-bottom-right') ;
 				}
 				break ;
 			case "bottom-left":
 				if(this.settings.eventTarget === window){
-					this.button.className += " toolbox-top-bottom-left-fixed" ;
+					changeClass.call(this, old, 'toolbox-top-bottom-left-fixed') ;
 				}
 				else{
-					this.button.className += " toolbox-top-bottom-left" ;
+					changeClass.call(this, old, 'toolbox-top-bottom-left') ;
 				}
 				break ;
 			case "top-right":
 				if(this.settings.eventTarget === window){
-					this.button.className += " toolbox-top-top-right-fixed" ;
+					changeClass.call(this, old, 'toolbox-top-top-right-fixed') ;
 				}
 				else{
-					this.button.className += " toolbox-top-top-right" ;
+					changeClass.call(this, old, 'toolbox-top-top-right') ;
 				}
 				break ;
 			case "top-left":
 				if(this.settings.eventTarget === window){
-					this.button.className += " toolbox-top-top-left-fixed" ;
+					changeClass.call(this, old, 'toolbox-top-top-left-fixed') ;
 				}
 				else{
-					this.button.className += " toolbox-top-top-left" ;
+					changeClass.call(this, old, 'toolbox-top-top-left') ;
 				}
 				break ;
 			default:
 				if(this.settings.eventTarget === window){
-					this.button.className += " toolbox-top-bottom-right-fixed" ;
+					changeClass.call(this, old, 'toolbox-top-bottom-right-fixed') ;
 				}
 				else{
-					this.button.className += " toolbox-top-bottom-right" ;
+					changeClass.call(this, old, 'toolbox-top-bottom-right') ;
 				}
 		}
 	}
@@ -329,13 +353,6 @@ var backtotop = (function(Toolbox) {
 
 	//Toolbox.backtotop = plugin ;
 	
-	var main = function(){
-		var backtotop = new plugin() ;
-		backtotop.create(arguments) ;
-		return backtotop ;
-	} ;
-	return main ;
+	return backtotop ;
 }(Toolbox));
-
-return backtotop ;
 }) ;
