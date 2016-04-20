@@ -9,7 +9,34 @@ module.exports = function(grunt){
 				src : 'dist/<%= pkg.name%><%= pkg.version%>.js',
 				dest : 'dist/<%= pkg.name%><%= pkg.version%>.min.js'
 			}
+		},
+		requirejs: {
+			compile: {
+				options: {
+					name: '../external/almond',
+					baseUrl: "utilities",
+					include: ['init'],
+					out: 'dist/<%= pkg.name%><%= pkg.version%>.js',
+					optimize : 'none',
+					wrap : {
+						startFile : 'build/buildstart.js',
+						endFile : 'build/buildend.js'
+					}
+				}
+			},
+			alone: {
+				options: {
+					baseUrl: "utilities",
+					name: 'init',
+					out: 'dist/<%= pkg.name%>-alone<%= pkg.version%>.min.js',
+				}
+				
+			}
 		}
 	}) ;
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-requirejs');
+
+	grunt.registerTask('default', ['requirejs', 'uglify']);
 
 };
