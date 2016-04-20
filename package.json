@@ -1,6 +1,6 @@
 {
   "name": "site-toolbox",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A compact toolbox to add utilities to a web app.",
   "main": "init.js",
   "directories": {
