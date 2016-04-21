@@ -4,7 +4,7 @@
 
 define(['./global'], function(Toolbox){
 
-return (function(Toolbox) {
+Toolbox.backtotop = (function(Toolbox) {
 	//Constructor
 	var backtotop = function(){} ;
 
@@ -14,9 +14,11 @@ return (function(Toolbox) {
 
 		var defaults = {
 			container : null,
-			speed : 'normal',
+			time : 1000,
+			animation : 'swing',
+			callback : function(){},
 			icon : null,
-			target : null,
+			target : $(window),
 			visibleTarget: null,
 			className : "",
 			size : "normal",
@@ -24,8 +26,9 @@ return (function(Toolbox) {
 		} ;
 
 		var settings = {
-			eventTarget : window,
-			className : 'toolbox-top'
+			eventTarget : $(window),
+			className : 'toolbox-top',
+			custom : false
 		} ;
 		if(arguments[0] && typeof arguments[0] === "object"){
 			this.options = extendDefaults(defaults, arguments[0]) ;
@@ -40,207 +43,92 @@ return (function(Toolbox) {
 	backtotop.prototype.create = function(){
 		init.call(this, arguments[0]) ;
 		if(this.options.container === null){
-			this.options.container = document.createElement('div') ;
-			while(document.body.firstChild){
-				this.options.container.appendChild(document.body.firstChild) ;
-			}
-			document.body.appendChild(this.options.container) ;
+			this.options.container = $('<div class="toolbox-top-container"></div>') ;
+			$('body').wrapInner(this.options.container) ;
 		}
 		else{
-			this.settings.eventTarget = this.options.container ;
-		}
-		if(this.options.target === null){
-			this.options.target = this.settings.eventTarget ;
+			this.options.container.addClass('toolbox-top-container') ;
+			this.settings.custom = true ;
 		}
 		buildButton.call(this) ;
 		initialiseEvents.call(this) ;
 		visible.call(this) ;
-	} ;
-	
-	backtotop.prototype.modify = function(){
-		var options = this.options ;
-		var oldsize = options.size ;
-		var oldpos = options.position ;
-		var classes = this.button.className ;
-		if(arguments[0] && typeof arguments[0] === 'object'){
-
-			this.options = extendDefaults(options, arguments[0]) ;
-		}
-		setButtonSize.call(this, 'toolbox-top-'+oldsize) ;
-		if(this.button.className.match('fixed')){
-			oldpos += '-fixed' ;
-		}
-		setButtonPosition.call(this, 'toolbox-top-'+oldpos) ;
-		visible.call(this) ;
+		console.log(document.body) ;
 	} ;
 
 	var visible = function(){
-		if(this.settings.eventTarget === window){
-			visibleContainer.call(this) ;
-		}
-		else{
-			visibleContainer.call(this) ;
-		}
-	}
-	var visibleContainer = function(){
 		var target = this.settings.eventTarget ;
-		var scrollTop = (target.scrollTop === undefined ?  target.pageYOffset : target.scrollTop) ;
+		var scrollTop = target.scrollTop() ;
 		if(this.options.visibleTarget === null){
-			var offset = (this.settings.eventTarget.offsetHeight === undefined ? this.settings.eventTarget.outerHeight : this.settings.eventTarget.offsetHeight);
+			var offset = this.settings.eventTarget.height() ;
 			if(scrollTop > offset){
-              
-              if(this.button.className.indexOf("toolbox-top-hide")>-1){
-				
-                this.button.className = this.button.className.replace("toolbox-top-hide", "toolbox-top-show") ;
-				}
-				else if(this.button.className.indexOf("toolbox-top-show")===-1){
-					this.button.className += " toolbox-top-show" ;
-				}
+				this.button.removeClass('toolbox-top-hide').addClass('toolbox-top-show') ;
 			}
 			else{
-				if(this.button.className.indexOf("toolbox-top-show")>-1){
-					this.button.className = this.button.className.replace("toolbox-top-show", "toolbox-top-hide") ;
-				}
-				else if(this.button.className.indexOf("toolbox-top-hide")===-1){
-					this.button.className += " toolbox-top-hide" ;
-				}
-
+				this.button.removeClass('toolbox-top-show').addClass('toolbox-top-hide') ;
 			}
 		}
 		else if(typeof(this.options.visibleTarget)==='number'){
 			var givenoffset = this.options.visibleTarget ;
-			if(scrollTop > givenoffset){
-				if(this.button.className.indexOf("toolbox-top-hide")>-1){
-					this.button.className = this.button.className.replace("toolbox-top-hide", "toolbox-top-show") ;
-				}
-				else if(this.button.className.indexOf('toolbox-top-show')===-1){
-					this.button.className += " toolbox-top-show" ;
-				}
+			if(scrollTop > givenoffset){	
+				this.button.removeClass('toolbox-top-hide').addClass('toolbox-top-show') ;
 			}
 			else{
-				if(this.button.className.indexOf("toolbox-top-show")>-1){
-					this.button.className = this.button.className.replace("toolbox-top-show", "toolbox-top-hide") ;
-				}
-				else if(this.button.className.indexOf("toolbox-top-hide")===-1){
-					this.button.className += " toolbox-top-hide" ;
-				}
+				this.button.removeClass('toolbox-top-show').addClass('toolbox-top-hide') ;
 			}
 		}
 		else{
 			var visibleTarget = this.options.visibleTarget ;
-			var visibleTargetOffset = visibleTarget.offsetTop  ;
-			var containerOffset = (this.settings.eventTarget.offsetTop === undefined ? 0 : this.settings.eventTarget.offsetTop) ;
-			var height = (this.settings.eventTarget.offsetHeight === undefined ? this.settings.eventTarget.outerHeight : this.settings.eventTarget.offsetHeight) ;
+			var visibleTargetOffset = visibleTarget.offset().top  ;
+			var containerOffset = this.settings.eventTarget.offset().top ;
+			var height = this.settings.eventTarget.height() ;
 			var requiredScroll = visibleTargetOffset - height ;
 			if(scrollTop >= requiredScroll){
-				if(this.button.className.indexOf("toolbox-top-hide")>-1){
-					this.button.className = this.button.className.replace("toolbox-top-hide", "toolbox-top-show") ;
-				}
-				else if(this.button.className.indexOf("toolbox-top-show")===-1){
-					this.button.className += " toolbox-top-show" ;
-				}
+				this.button.removeClass('toolbox-top-hide').addClass('toolbox-top-show') ;
 			}
 			else{
-				if(this.button.className.indexOf("toolbox-top-show")>-1){
-					this.button.className = this.button.className.replace("toolbox-top-show", "toolbox-top-hide") ;
-				}
-				else if(this.button.className.indexOf("toolbox-top-hide")===-1){
-					this.button.className += " toolbox-top-hide" ;
-				}
+				this.button.removeClass('toolbox-top-show').addClass('toolbox-top-hide') ;
 			}
 		}
 	} ;
 	
 	var scroll = function(){
-		var time ;
-		var acceleration = 10 ;
-		var distance=0 ;
-		switch (this.options.speed){
-			case "normal":
-				time = 0.5 ;
-				break ;
-			case "fast":
-				time = 0.25 ;
-				break ;
-			case "slow":
-				time = 1 ;
-				break ;
-			default:
-				time = 0.5 ;
-				break ;
-		}
-		var currentPos = (this.settings.eventTarget.scrollTop === undefined ? this.settings.eventTarget.pageYOffset : this.settings.eventTarget.scrollTop);
-		var destinationPos = (this.options.target.offsetTop === undefined ? 0 : this.options.target.offsetTop) ;
-		var requiredDistance = currentPos - destinationPos ;
-		var reachedPos = currentPos ;
-		if(requiredDistance < 0)
-			return ;
-		acceleration = (2*requiredDistance)/Math.log(1+time) ;
-		var elapsedTime = 0 ;
-		var setter = function(){
-			if(distance <= requiredDistance){
-			distance = (acceleration*Math.log(1+ elapsedTime))/2 ;
-			if(distance >= requiredDistance){
-				clearInterval(timer) ;
-				if(this.settings.eventTarget === window){
-					document.body.scrollTop = destinationPos ;
-				}
-				else{
-					this.options.container.scrollTop = currentPos-distance ;
-				}
-				return ;
-			}
-			if(this.settings.eventTarget === window){
-				document.body.scrollTop = currentPos - distance ;
-				reachedPos = this.settings.eventTarget.pageYOffset ;
-			}else{
-				this.options.container.scrollTop = currentPos-distance ;
-				reachedPos = this.options.container.scrollTop ;
-			}
-			elapsedTime += 0.005 ;
+		if(this.settings.eventTarget != this.options.container){
+			$('body').animate({scrollTop : 0}, this.options.time, this.options.animation, this.options.callback) ;
 		}
 		else{
-			clearInterval(timer) ;
-			if(this.settings.eventTarget === window){
-				document.body.scrollTop = destinationPos ;
-			}
-			else{
-				this.options.container.scrollTop = currentPos-distance ;
-			}
+			this.options.container.animate({scrollTop : 0}, this.options.time, this.options.animation, this.options.callback) ;
 		}
-		}
-		var timer = setInterval(setter.bind(this), 5) ;
 	}
 
 	function buildButton(){
 		var icon, frag, wrapper, clone ;
 		if(this.options.icon === null){
-			icon = document.createElement("div") ;
-			icon.innerHTML = "^" ;
-			icon.className = "toolbox-top-caret" ;
-		}
-      
+			icon = $('<div></div>') ;
+			icon.html("^") ;
+			icon.addClass("toolbox-top-caret") ;
+		} 
 		else{
 			icon = this.options.icon ;
 		}
-		icon.className += ' toolbox-top-icon' ;
+		icon.addClass('toolbox-top-icon') ;
 		
-		this.wrapper = document.createElement("div") ;
-		this.wrapper.className = 'toolbox-top-wrapper' ;
-		this.wrapper.style.width = this.options.container.offsetWidth + "px" ;
-		//clone = this.options.container.cloneNode(true) ;
-		frag = document.createDocumentFragment() ;
-		frag.appendChild(this.wrapper) ;
-		this.options.container.parentNode.appendChild(frag) ;
+		this.wrapper = $('<div></div>') ;
+		this.wrapper.addClass('toolbox-top-wrapper') ;
 		
-		this.button = document.createElement("div") ;
-		this.button.className = this.settings.className+' '+this.options.className ;
-		this.button.appendChild(icon) ;
-		
+		this.button = $('<div></div>') ;
+		this.button.addClass(this.settings.className+' '+this.options.className) ;
+		this.button.append(icon) ;
+		$('.toolbox-top-container').wrapAll(this.wrapper) ;
+		$('.toolbox-top-wrapper').append(this.button) ;
+		this.options.container = $('.toolbox-top-container') ;
+		this.button = $('.toolbox-top') ;
+		this.wrapper = $('.toolbox-top-wrapper') ;
+		if(this.settings.custom == true){
+			this.settings.eventTarget = this.options.container ;
+		}
+		this.wrapper.width(this.settings.eventTarget.width()) ;
 		setButtonSize.call(this, '') ;
-		this.wrapper.appendChild(this.options.container) ;
-		this.wrapper.appendChild(this.button) ;
-
 		setButtonPosition.call(this, '') ;
 		
 	}
@@ -248,11 +136,10 @@ return (function(Toolbox) {
 	function initialiseEvents(){
 		var timer =0;
 		var global = this ;
-		this.transitionEnd = transitionSelect() ;
 		
-		this.button.addEventListener('click', scroll.bind(this)) ;
+		this.button.bind('click', scroll.bind(this)) ;
 		
-		this.settings.eventTarget.addEventListener('scroll', function(){
+		this.settings.eventTarget.bind('scroll', function(){
 			if(!timer){
 				timer = setTimeout(function(){
 					visible.call(global) ;
@@ -262,25 +149,18 @@ return (function(Toolbox) {
 		}) ;
 	}
 	
-	function changeClass(oldClass, newClass){
-		if(oldClass === ''){
-			this.button.className += " "+newClass ;
-			return ;
-		}
-		this.button.className = this.button.className.replace(oldClass, newClass) ;
-	}
 	function setButtonSize(old){
 		if(this.options.size === "normal"){
-			changeClass.call(this, old, 'toolbox-top-normal') ;
+			this.button.addClass('toolbox-top-normal') ;
 		}
 		else if(this.options.size === "small"){
-			changeClass.call(this, old, 'toolbox-top-small') ;
+			this.button.addClass('toolbox-top-small') ;
 		}
 		else if(this.options.size === "large"){
-			changeClass.call(this, old, 'toolbox-top-large') ;
+			this.button.addClass('toolbox-top-large') ;
 		}
 		else{
-			changeClass.call(this, old, 'toolbox-top-normal') ;
+			this.button.addClass('toolbox-top-normal') ;
 		}
 
 	}
@@ -288,51 +168,45 @@ return (function(Toolbox) {
 	function setButtonPosition(old){
 		switch (this.options.position){
 			case "bottom-right":
-				if(this.settings.eventTarget === window){
-					changeClass.call(this, old, 'toolbox-top-bottom-right-fixed') ;
+				if(this.settings.eventTarget != this.options.container){
+					this.button.addClass('toolbox-top-bottom-right-fixed') ;
 				}
 				else{
-					changeClass.call(this, old, 'toolbox-top-bottom-right') ;
+					this.button.addClass('toolbox-top-bottom-right') ;
 				}
 				break ;
 			case "bottom-left":
-				if(this.settings.eventTarget === window){
-					changeClass.call(this, old, 'toolbox-top-bottom-left-fixed') ;
+				if(this.settings.eventTarget != this.options.container){
+					this.button.addClass('toolbox-top-bottom-left-fixed') ;
 				}
 				else{
-					changeClass.call(this, old, 'toolbox-top-bottom-left') ;
+					this.button.addClass('toolbox-top-bottom-left') ;
 				}
 				break ;
 			case "top-right":
-				if(this.settings.eventTarget === window){
-					changeClass.call(this, old, 'toolbox-top-top-right-fixed') ;
+				if(this.settings.eventTarget != this.options.container){
+					this.button.addClass('toolbox-top-top-right-fixed') ;
 				}
 				else{
-					changeClass.call(this, old, 'toolbox-top-top-right') ;
+					this.button.addClass('toolbox-top-top-right') ;
 				}
 				break ;
 			case "top-left":
-				if(this.settings.eventTarget === window){
-					changeClass.call(this, old, 'toolbox-top-top-left-fixed') ;
+				if(this.settings.eventTarget != this.options.container){
+					this.button.addClass('toolbox-top-top-left-fixed') ;
 				}
 				else{
-					changeClass.call(this, old, 'toolbox-top-top-left') ;
+					this.button.addClass('toolbox-top-top-left') ;
 				}
 				break ;
 			default:
-				if(this.settings.eventTarget === window){
-					changeClass.call(this, old, 'toolbox-top-bottom-right-fixed') ;
+				if(this.settings.eventTarget != this.options.container){
+					this.button.addClass('toolbox-top-bottom-right-fixed') ;
 				}
 				else{
-					changeClass.call(this, old, 'toolbox-top-bottom-right') ;
+					this.button.addClass('toolbox-top-bottom-right') ;
 				}
 		}
-	}
-	function transitionSelect() {
-		var el = document.createElement("div");
-		if (el.style.WebkitTransition) return "webkitTransitionEnd";
-		if (el.style.OTransition) return "oTransitionEnd";
-		return 'transitionend';
 	}
 	// Utility method to extend defaults with user options
 	function extendDefaults(source, properties) {

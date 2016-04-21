@@ -18,7 +18,7 @@ define(['./global', './backtotop'], function(Toolbox){
 				return ;
 			}
 		}
-		var tool = require('./'+tooltype) ;
+		var tool = this[tooltype] ;
 		var addtool = new tool() ;
 		addtool.create(tool_config) ;
 		var tool_info = {

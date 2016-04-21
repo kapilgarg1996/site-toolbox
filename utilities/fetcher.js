@@ -1,0 +1,2 @@
+define(['./global'], function(Toolbox){
+});
