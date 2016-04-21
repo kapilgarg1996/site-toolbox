@@ -4,7 +4,7 @@
 
 define(['./global'], function(Toolbox){
 
-return (function(Toolbox) {
+Toolbox.backtotop = (function(Toolbox) {
 	//Constructor
 	var backtotop = function(){} ;
 
