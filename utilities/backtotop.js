@@ -18,7 +18,7 @@ Toolbox.backtotop = (function(Toolbox) {
 			animation : 'swing',
 			callback : function(){},
 			icon : null,
-			target : $(window),
+			target : null,
 			visibleTarget: null,
 			className : "",
 			size : "normal",
@@ -93,11 +93,12 @@ Toolbox.backtotop = (function(Toolbox) {
 	} ;
 	
 	var scroll = function(){
+		var target = (this.options.target === null ? 0 : this.options.target.offset().top) ;
 		if(this.settings.eventTarget != this.options.container){
-			$('body').animate({scrollTop : 0}, this.options.time, this.options.animation, this.options.callback) ;
+			$('body').animate({scrollTop : target}, this.options.time, this.options.animation, this.options.callback) ;
 		}
 		else{
-			this.options.container.animate({scrollTop : 0}, this.options.time, this.options.animation, this.options.callback) ;
+			this.options.container.animate({scrollTop : target}, this.options.time, this.options.animation, this.options.callback) ;
 		}
 	}
 
