@@ -1,7 +1,7 @@
 # site-toolbox
 Different kinds of website utilities and tools.
 
-All tools and widgets are written in javascript so there is no dependency on other libraries. Also, if you have already using requirejs on your webapp then you can use it as an module also.
+All tools require jquery so in order to use toolbox include jquery in your webpages. Also, if you have already using requirejs on your webapp then you can use it as a module also.
 
 ## Downloads
 
