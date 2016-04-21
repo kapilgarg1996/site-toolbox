@@ -1,0 +1,16 @@
+.toolbox-fetcher-overlay{
+	background : grey ;
+  display:-webkit-flex ;
+  display: flex ;
+}
+.toolbox-fetcher-loader{
+	width: 30px ;
+	height: 30px ;
+	background: grey;
+	animation: circle 1s linear infinite ;
+}
+@keyframes circle {
+	from { transform : rotate(0deg) ;}
+	to {transform : rotate(360deg) ;}
+}
+

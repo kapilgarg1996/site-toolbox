@@ -31,7 +31,7 @@ Toolbox.backtotop = (function(Toolbox) {
 			custom : false
 		} ;
 		if(arguments[0] && typeof arguments[0] === "object"){
-			this.options = extendDefaults(defaults, arguments[0]) ;
+			this.options = Toolbox.extendDefaults(defaults, arguments[0]) ;
 		}
 		else{
 			this.options = defaults ;
@@ -210,20 +210,6 @@ Toolbox.backtotop = (function(Toolbox) {
 		}
 	}
 	// Utility method to extend defaults with user options
-	function extendDefaults(source, properties) {
-		var property;
-		for (property in properties) {
-			if (properties.hasOwnProperty(property)) {
-				if(property === 'className'){
-					source[property] += properties[property] ;
-				}
-				else{
-					source[property] = properties[property];
-				}
-			}
-		}
-		return source;
-	}
 
 	//Toolbox.backtotop = plugin ;
 	
