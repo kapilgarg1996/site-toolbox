@@ -1,11 +1,12 @@
 //description : Main Toolbox which holds all the tools
 
-define(['./global', './backtotop'], function(Toolbox){
+define(['./global', './backtotop', './prefetcher'], function(Toolbox){
 
 (function(Toolbox){
 	Toolbox.tools = {} ;
 
 	Toolbox.addTool = function(tool_id, tooltype, tool_config){
+		console.log(tool_id, tooltype, tool_config) ;
 		tool_config = tool_config || {} ;
 		if(this.tools[tool_id] != undefined){
 			if(this.tools[tool_id].tooltype === tooltype){

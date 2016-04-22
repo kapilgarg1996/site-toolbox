@@ -4,10 +4,17 @@
   display: flex ;
 }
 .toolbox-fetcher-loader{
-	width: 30px ;
-	height: 30px ;
+	width: 40px ;
+	height: 40px ;
 	background: grey;
+	border : 2px solid white ;
+	border-radius : 22px ;
 	animation: circle 1s linear infinite ;
+}
+.toolbox-fetcher-loader-hand{
+	width: 20px ;
+	border : 1px solid white ;
+	transform : translate(20px, 20px) ;
 }
 @keyframes circle {
 	from { transform : rotate(0deg) ;}

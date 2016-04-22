@@ -2,6 +2,9 @@ define(['./global'], function(Toolbox){
 	Toolbox.prefetcher = (function(Toolbox){
 		
 		var prefetcher = function(){
+		} ;
+		
+		var init = function(){
 			var defaults = {
 				trigger : null,
 				url : null,
@@ -17,32 +20,20 @@ define(['./global'], function(Toolbox){
 				contentChanged : false,
 				oldContent : [],
 				newContent : null,
+				newTitle : '',
 				error : false,
 				eventTriggered : false,
 			} ;
 
-			this.options = this.options || {} ;
 			if(arguments[0] && typeof arguments[0] === 'object'){
 				this.options = Toolbox.extendDefaults(defaults, arguments[0]) ;
 			}
 			else{
 				throw 'Prefetcher needs the required parameters' ;
 			}
-		} ;
-		
-		var init = function(){
 			this.settings.oldContent.push($(this.options.container).html()) ;
 			initialiseEvents.call(this) ;
 			loadPage.call(this) ;
-		} ;
-
-		var executeScripts = function(){
-			var scripts ;
-			var content = $(this.options.container).html() ;
-			scripts = content.getElementsByTagsName('script') ;
-			for(script in scripts){
-				eval(script) ;
-			}
 		} ;
 
 		var loadPage = function(){
@@ -65,8 +56,9 @@ define(['./global'], function(Toolbox){
 		} ;
 		
 		var changePage = function(){
-			$(this.options.container).html(this.settings.newContent) ;
-			executeScripts.call(this) ;
+			filterTarget.call(this) ;
+			$(this.options.container).html('') ;
+			$(this.options.container).append(this.settings.newContent) ;
 			if(this.options.multipage){
 				this.settings.pageLoaded = false ;
 				this.settings.error = false ;
@@ -75,6 +67,12 @@ define(['./global'], function(Toolbox){
 				this.settings.newContent = null ;
 				init.call(this) ;
 			}
+		} ;
+		
+		var filterTarget = function(){
+			var content = this.settings.newContent ;
+			var filtered = $(content).find(this.options.target) ;
+			this.settings.newContent = filtered ;
 		} ;
 
 		var showLoader = function(){
@@ -97,6 +95,7 @@ define(['./global'], function(Toolbox){
 			loader = $('<div></div>') ;
 			loader.css({'position':loaderpos, 'top':loadertop, 'left':loaderleft, 'z-index':1000}) ;
 			loader.addClass('toolbox-fetcher-loader') ;
+			loader.append("<div class='toolbox-fetcher-loader-hand'></div>") ;
 			overlay.append(loader) ;
 			$(this.options.container).after(overlay) ;
 		} ;
@@ -146,11 +145,12 @@ define(['./global'], function(Toolbox){
 
 		var initialiseEvents = function(){
 			var global = this ;
-			$(this.options.trigger).live('click', clickHandler.bind(global)) ;
+			console.log(this.options.trigger) ;
+			$(this.options.trigger).bind('click', clickHandler.bind(global)) ;
 		} ;
 
 		prefetcher.prototype.create = function(){
-			init.call(this) ;
+			init.call(this, arguments[0]) ;
 		} ;
 		
 		prefetcher.prototype.start = function(){
