@@ -2,33 +2,25 @@ module.exports = function(grunt){
 	grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
 		concat: {
-			options: {
-				separator: ';'
-			},
-			dist: {
+			dist:{
 				src: ['css/**/*.css'],
 				dest: 'dist/<%= pkg.name%><%= pkg.version%>.css'
 			}
 		},
+		cssmin: {
+			dist: {
+				src: ['css/**/*.css'],
+				dest: 'dist/<%= pkg.name%><%= pkg.version%>.min.css'
+			}
+		},
 		uglify : {
-			js:{
 				options : {
 					banner : '/* <%= pkg.name %> <%= pkg.version %>\nA cool Toolbox with some awesome tools\n Build Date : <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 				},
 				build : {
 					src : 'dist/<%= pkg.name%><%= pkg.version%>.js',
 					dest : 'dist/<%= pkg.name%><%= pkg.version%>.min.js'
-				}
-			},
-			css:{
-				options : {
-					banner : '/* <%= pkg.name %> <%= pkg.version %>\nCSS file for Toolbox\n Build Date : <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 				},
-				build : {
-					src : 'dist/<%= pkg.name%><%= pkg.version%>.css',
-					dest : 'dist/<%= pkg.name%><%= pkg.version%>.min.css'
-				}
-			}
 		},
 		requirejs: {
 			compile: {
@@ -54,9 +46,10 @@ module.exports = function(grunt){
 			}
 		}
 	}) ;
+	grunt.loadNpmTasks('grunt-contrib-cssmin') ;
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.registerTask('default', ['requirejs', 'concat', 'uglify']);
+	grunt.registerTask('default', ['requirejs', 'concat', 'uglify', 'cssmin']);
 
 };

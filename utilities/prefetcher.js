@@ -12,7 +12,8 @@ define(['./global'], function(Toolbox){
 				timeout : 10000,
 				container : 'body',
 				loader : true,
-				multipage : false
+				multipage : false,
+				links : false,
 			} ;
 
 			this.settings = {
@@ -30,6 +31,9 @@ define(['./global'], function(Toolbox){
 			}
 			else{
 				throw 'Prefetcher needs the required parameters' ;
+			}
+			if(this.options.multipage){
+                this.options.url = $(this.options.trigger).attr('data-toolbox-url') ;
 			}
 			this.settings.oldContent.push($(this.options.container).html()) ;
 			initialiseEvents.call(this) ;
@@ -65,7 +69,7 @@ define(['./global'], function(Toolbox){
 				this.settings.eventTriggered = false ;
 				this.settings.contentChanged = false ;
 				this.settings.newContent = null ;
-				init.call(this) ;
+				init.call(this, this.options) ;
 			}
 		} ;
 		
