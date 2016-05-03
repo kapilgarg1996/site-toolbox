@@ -32,8 +32,8 @@ define(['./global', './backtotop', './prefetcher'], function(Toolbox){
 		return addtool ;
 	} ;
 
-	Toolbox.removeTool = function(){
-
+	Toolbox.removeTool = function(tool_id){
+		delete Toolbox.tools[tool_id]
 	} ;
 
 	return Toolbox ;
