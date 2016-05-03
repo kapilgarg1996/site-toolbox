@@ -7,7 +7,7 @@ All tools require jquery so in order to use toolbox include jquery in your webpa
 
 [Latest Release](https://github.com/kapilgarg1996/site-toolbox/releases/tag/2.://github.com/kapilgarg1996/site-toolbox/releases/tag/2.0)
 
-Currently it contains only backtotop tool but more tools will be rolling out soon.
+Currently it contains only backtotop and prefetcher tools but more tools will be rolling out soon.
 
 ## How to use
 
